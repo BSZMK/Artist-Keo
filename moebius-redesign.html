@@ -1085,6 +1085,487 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* ============================================
+       层级页面 - 作品详情全屏覆盖
+       ============================================ */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--m-ivory);
+      overflow-y: auto;
+      overflow-x: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .detail-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* 层级页面顶部导航 */
+    .detail-nav {
+      position: sticky;
+      top: 0;
+      z-index: 210;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(250, 246, 240, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: var(--line-medium) solid var(--m-ink);
+    }
+
+    .detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--m-ink);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.3s ease, gap 0.3s ease;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .detail-back:hover {
+      color: var(--m-terracotta);
+      gap: 14px;
+    }
+
+    .detail-back svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .detail-back:hover svg {
+      transform: translateX(-4px);
+    }
+
+    .detail-nav-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--m-ink);
+      letter-spacing: 0.05em;
+    }
+
+    .detail-nav-spacer {
+      width: 100px;
+    }
+
+    /* 层级页面内容 */
+    .detail-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px 120px;
+    }
+
+    /* Hero 视频/封面区域 */
+    .detail-hero-video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--m-ink);
+      border: var(--line-medium) solid var(--m-ink);
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+
+    .detail-hero-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .detail-hero-video .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--m-indigo) 0%, var(--m-azure) 50%, var(--m-terracotta) 100%);
+      cursor: pointer;
+      transition: opacity 0.4s ease;
+    }
+
+    .detail-hero-video .video-placeholder.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .video-play-btn {
+      width: 80px;
+      height: 80px;
+      border: var(--line-medium) solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      background: rgba(250, 246, 240, 0.15);
+      backdrop-filter: blur(4px);
+    }
+
+    .video-play-btn:hover {
+      transform: scale(1.1);
+      background: rgba(250, 246, 240, 0.3);
+    }
+
+    .video-play-btn svg {
+      width: 32px;
+      height: 32px;
+      fill: rgba(255, 255, 255, 0.9);
+      margin-left: 4px;
+    }
+
+    .video-play-label {
+      font-family: var(--font-accent);
+      font-size: 0.9rem;
+      font-style: italic;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 16px;
+    }
+
+    /* 莫比斯式浮动装饰 */
+    .detail-hero-video .video-placeholder::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      top: -80px;
+      right: -60px;
+      background: radial-gradient(ellipse, rgba(212, 149, 116, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: washFloat 10s ease-in-out infinite;
+    }
+
+    .detail-hero-video .video-placeholder::after {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      bottom: -40px;
+      left: -40px;
+      background: radial-gradient(ellipse, rgba(74, 144, 184, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: washFloat 14s ease-in-out infinite reverse;
+    }
+
+    /* 作品信息区 */
+    .detail-info {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 64px;
+      margin-bottom: 64px;
+    }
+
+    .detail-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      color: var(--m-ink);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .detail-subtitle {
+      font-family: var(--font-accent);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--m-azure);
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
+
+    .detail-description {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--m-ink-light);
+      line-height: 1.9;
+      margin-bottom: 32px;
+    }
+
+    .detail-description p {
+      margin-bottom: 16px;
+    }
+
+    /* 侧边栏元信息 */
+    .detail-sidebar {
+      position: relative;
+      padding: 32px;
+      background: var(--m-sand);
+      border: var(--line-medium) solid var(--m-ink);
+    }
+
+    .detail-sidebar::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: var(--line-thin) solid rgba(26, 26, 46, 0.08);
+      pointer-events: none;
+    }
+
+    .detail-meta-group {
+      margin-bottom: 24px;
+    }
+
+    .detail-meta-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-meta-label {
+      font-family: var(--font-accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--m-azure);
+      margin-bottom: 8px;
+    }
+
+    .detail-meta-value {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--m-ink);
+      line-height: 1.6;
+    }
+
+    .detail-tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .detail-tools-list .tool-tag {
+      font-size: 0.7rem;
+    }
+
+    /* 作品画廊 */
+    .detail-gallery {
+      margin-bottom: 64px;
+    }
+
+    .detail-gallery-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--m-ink);
+      margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: var(--line-medium) solid var(--m-ink);
+    }
+
+    .detail-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, var(--m-sand) 0%, var(--m-desert-light) 100%);
+      border: var(--line-medium) solid var(--m-ink);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                  box-shadow 0.4s ease;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 6px 6px 0 var(--m-desert);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-item .gallery-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-item .gallery-placeholder svg {
+      opacity: 0.25;
+    }
+
+    .gallery-item-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: linear-gradient(transparent, rgba(26, 26, 46, 0.7));
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--m-sand);
+      letter-spacing: 0.05em;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+    }
+
+    .gallery-item:hover .gallery-item-label {
+      transform: translateY(0);
+    }
+
+    /* 视频列表区 */
+    .detail-videos {
+      margin-bottom: 64px;
+    }
+
+    .detail-videos-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--m-ink);
+      margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: var(--line-medium) solid var(--m-ink);
+    }
+
+    .detail-videos-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .video-item {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      border: var(--line-medium) solid var(--m-ink);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                  box-shadow 0.4s ease;
+      background: var(--m-sand);
+    }
+
+    .video-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 6px 6px 0 var(--m-azure);
+    }
+
+    .video-item-thumb {
+      position: relative;
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, var(--m-indigo) 0%, var(--m-azure) 100%);
+      overflow: hidden;
+    }
+
+    .video-item-thumb .mini-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      background: rgba(26, 26, 46, 0.3);
+    }
+
+    .video-item:hover .video-item-thumb .mini-play {
+      opacity: 1;
+    }
+
+    .mini-play-circle {
+      width: 48px;
+      height: 48px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-play-circle svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+      margin-left: 2px;
+    }
+
+    .video-item-info {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .video-item-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--m-ink);
+      margin-bottom: 8px;
+    }
+
+    .video-item-desc {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--m-ink-light);
+      line-height: 1.6;
+    }
+
+    .video-item-duration {
+      font-family: var(--font-accent);
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--m-azure);
+      margin-top: 8px;
+    }
+
+    /* 层级页面响应式 */
+    @media (max-width: 768px) {
+      .detail-nav {
+        padding: 12px 20px;
+      }
+      .detail-content {
+        padding: 40px 20px 80px;
+      }
+      .detail-info {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .detail-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .video-item {
+        grid-template-columns: 1fr;
+      }
+      .video-item-thumb {
+        aspect-ratio: 16/9;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1159,7 +1640,7 @@
     </div>
 
     <!-- 精选项目 -->
-    <div class="featured-work reveal">
+    <div class="featured-work reveal" onclick="openDetail('detail-collection')">
       <div class="featured-work-inner">
         <div class="featured-work-visual">
           <!-- 占位视觉区 - 莫比斯式水彩渲染 -->
@@ -1183,7 +1664,7 @@
             <span class="tool-tag">Substance Painter</span>
           </div>
           <p class="featured-year">2024</p>
-          <a href="#" class="featured-link">
+          <a href="javascript:void(0)" class="featured-link" onclick="openDetail('detail-collection')">
             查看作品
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
@@ -1193,7 +1674,7 @@
 
     <!-- 常规项目网格 -->
     <div class="works-grid">
-      <div class="work-card reveal">
+      <div class="work-card reveal" onclick="openDetail('detail-character')">
         <div class="work-card-visual" style="background: linear-gradient(135deg, #2D3561 0%, #4A90B8 100%);">
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
@@ -1213,7 +1694,7 @@
         </div>
       </div>
 
-      <div class="work-card reveal">
+      <div class="work-card reveal" onclick="openDetail('detail-game-scene')">
         <div class="work-card-visual" style="background: linear-gradient(135deg, #C67B5C 0%, #D4A574 100%);">
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
@@ -1233,7 +1714,7 @@
         </div>
       </div>
 
-      <div class="work-card reveal">
+      <div class="work-card reveal" onclick="openDetail('detail-ue-scene')">
         <div class="work-card-visual" style="background: linear-gradient(135deg, #87A889 0%, #2D8B7A 100%);">
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
@@ -1254,7 +1735,7 @@
         </div>
       </div>
 
-      <div class="work-card reveal">
+      <div class="work-card reveal" onclick="openDetail('detail-action')">
         <div class="work-card-visual" style="background: linear-gradient(135deg, #9B8EC4 0%, #6B4C6E 100%);">
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
@@ -1274,7 +1755,7 @@
         </div>
       </div>
 
-      <div class="work-card reveal">
+      <div class="work-card reveal" onclick="openDetail('detail-experimental')">
         <div class="work-card-visual" style="background: linear-gradient(135deg, #D4920A 0%, #C9A84C 100%);">
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
@@ -1447,6 +1928,546 @@
     </div>
   </section>
 
+  <!-- ══════════════════════════════════════════
+       层级页面 - 作品集合集详情
+       ══════════════════════════════════════════ -->
+  <div class="detail-overlay" id="detail-collection">
+    <div class="detail-nav">
+      <button class="detail-back" onclick="closeDetail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回
+      </button>
+      <span class="detail-nav-title">作品集合集</span>
+      <div class="detail-nav-spacer"></div>
+    </div>
+    <div class="detail-content">
+      <!-- 开场视频 -->
+      <div class="detail-hero-video">
+        <video id="heroVideo-collection" loop playsinline>
+          <source src="" type="video/mp4">
+        </video>
+        <div class="video-placeholder" onclick="playHeroVideo('collection')">
+          <div class="video-play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+          </div>
+          <span class="video-play-label">播放开场视频</span>
+        </div>
+      </div>
+
+      <!-- 作品信息 -->
+      <div class="detail-info">
+        <div>
+          <h1 class="detail-title">作品集合集</h1>
+          <p class="detail-subtitle">Animation Reel & Visual Narrative Collection</p>
+          <div class="detail-description">
+            <p>从角色绑定到场景渲染，从传统动画技法到实时引擎呈现——这个合集收录了最具代表性的视觉叙事作品。每一帧画面都是对莫比斯美学的致敬：精准的线条勾勒世界的骨架，通透的色彩填充灵魂的呼吸。</p>
+            <p>合集涵盖高级角色绑定与动画制作、风格化场景设计、Layout动画预演等多个方向，展现了从概念到落地的完整创作流程。在传统技法与数字技术之间，寻找影视美学的平衡点。</p>
+          </div>
+        </div>
+        <div class="detail-sidebar">
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">年份</div>
+            <div class="detail-meta-value">2024</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">类别</div>
+            <div class="detail-meta-value">动画合集 · 视觉叙事</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">工具</div>
+            <div class="detail-tools-list">
+              <span class="tool-tag">Maya</span>
+              <span class="tool-tag">ZBrush</span>
+              <span class="tool-tag">Substance Painter</span>
+              <span class="tool-tag">UE5</span>
+            </div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">时长</div>
+            <div class="detail-meta-value">约 3 分 42 秒</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">状态</div>
+            <div class="detail-meta-value" style="color: var(--m-teal); font-weight: 600;">已发布</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 视频列表 -->
+      <div class="detail-videos">
+        <h2 class="detail-videos-title">视频章节</h2>
+        <div class="detail-videos-list">
+          <div class="video-item" onclick="playVideoSection(this, '角色动画展示')">
+            <div class="video-item-thumb" style="background: linear-gradient(135deg, #2D3561 0%, #4A90B8 100%);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" opacity="0.25">
+                  <circle cx="30" cy="30" r="18" stroke="white" stroke-width="1.5"/>
+                  <path d="M22 30 Q 26 18, 30 26 Q 34 34, 38 22" stroke="white" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="mini-play">
+                <div class="mini-play-circle">
+                  <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="video-item-info">
+              <h3 class="video-item-title">角色动画展示</h3>
+              <p class="video-item-desc">高级角色绑定与关键帧动画，展现从走路循环到表演级动画的制作过程。</p>
+              <span class="video-item-duration">01:24</span>
+            </div>
+          </div>
+
+          <div class="video-item" onclick="playVideoSection(this, '场景设计渲染')">
+            <div class="video-item-thumb" style="background: linear-gradient(135deg, #C67B5C 0%, #D4A574 100%);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" opacity="0.25">
+                  <rect x="12" y="18" width="36" height="28" rx="2" stroke="white" stroke-width="1.5"/>
+                  <path d="M12 32 L30 22 L48 32" stroke="white" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="mini-play">
+                <div class="mini-play-circle">
+                  <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="video-item-info">
+              <h3 class="video-item-title">场景设计与渲染</h3>
+              <p class="video-item-desc">风格化场景从概念到最终渲染，包含光照设计、材质调节与氛围构建。</p>
+              <span class="video-item-duration">00:58</span>
+            </div>
+          </div>
+
+          <div class="video-item" onclick="playVideoSection(this, 'Layout动画预演')">
+            <div class="video-item-thumb" style="background: linear-gradient(135deg, #87A889 0%, #2D8B7A 100%);">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" opacity="0.25">
+                  <path d="M15 42 L25 18 L35 32 L45 15" stroke="white" stroke-width="1.5"/>
+                  <circle cx="25" cy="18" r="3" stroke="white" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="mini-play">
+                <div class="mini-play-circle">
+                  <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+                </div>
+              </div>
+            </div>
+            <div class="video-item-info">
+              <h3 class="video-item-title">Layout动画预演</h3>
+              <p class="video-item-desc">镜头语言与构图预演，展示从分镜到Layout的视觉叙事构建过程。</p>
+              <span class="video-item-duration">01:10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 作品画廊 -->
+      <div class="detail-gallery">
+        <h2 class="detail-gallery-title">作品截图</h2>
+        <div class="detail-gallery-grid">
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-indigo) 0%, var(--m-azure) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <circle cx="40" cy="40" r="25" stroke="white" stroke-width="1.5"/>
+                <path d="M30 40 Q 35 25, 40 35 Q 45 45, 50 30" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">角色绑定线框视图</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-terracotta) 0%, var(--m-desert) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <rect x="15" y="20" width="50" height="40" rx="2" stroke="white" stroke-width="1.5"/>
+                <path d="M15 35 L40 25 L65 35" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">场景氛围渲染</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-teal) 0%, var(--m-sage) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <path d="M20 60 L35 25 L50 45 L65 20" stroke="white" stroke-width="1.5"/>
+                <circle cx="35" cy="25" r="3" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">Layout镜头构图</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-plum) 0%, var(--m-lavender) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <path d="M30 50 Q 35 20, 40 40 Q 45 60, 50 30" stroke="white" stroke-width="1.5"/>
+                <circle cx="40" cy="35" r="12" stroke="white" stroke-width="1" stroke-dasharray="3,3"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">动画关键帧展示</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 层级页面 - 角色设计详情 -->
+  <div class="detail-overlay" id="detail-character">
+    <div class="detail-nav">
+      <button class="detail-back" onclick="closeDetail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回
+      </button>
+      <span class="detail-nav-title">角色设计</span>
+      <div class="detail-nav-spacer"></div>
+    </div>
+    <div class="detail-content">
+      <div class="detail-hero-video">
+        <video id="heroVideo-character" loop playsinline>
+          <source src="" type="video/mp4">
+        </video>
+        <div class="video-placeholder" onclick="playHeroVideo('character')">
+          <div class="video-play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+          </div>
+          <span class="video-play-label">播放展示视频</span>
+        </div>
+      </div>
+      <div class="detail-info">
+        <div>
+          <h1 class="detail-title">角色设计</h1>
+          <p class="detail-subtitle">Character Concept & Digital Sculpting</p>
+          <div class="detail-description">
+            <p>概念角色创作与数字雕塑，从2D概念草图到3D高模的完整角色设计流程。注重角色的叙事性和视觉辨识度，每一个角色都承载着独特的故事与性格。</p>
+          </div>
+        </div>
+        <div class="detail-sidebar">
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">年份</div>
+            <div class="detail-meta-value">2023</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">工具</div>
+            <div class="detail-tools-list">
+              <span class="tool-tag">Photoshop</span>
+              <span class="tool-tag">ZBrush</span>
+              <span class="tool-tag">Blender</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <h2 class="detail-gallery-title">角色设计稿</h2>
+        <div class="detail-gallery-grid">
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-indigo) 0%, var(--m-lavender) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <circle cx="40" cy="35" r="15" stroke="white" stroke-width="1.5"/>
+                <path d="M25 65 Q 40 50, 55 65" stroke="white" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">角色概念草图</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-terracotta) 0%, var(--m-amber) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <circle cx="40" cy="40" r="22" stroke="white" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <circle cx="40" cy="40" r="12" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">ZBrush高模雕塑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 层级页面 - 游戏场景设计详情 -->
+  <div class="detail-overlay" id="detail-game-scene">
+    <div class="detail-nav">
+      <button class="detail-back" onclick="closeDetail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回
+      </button>
+      <span class="detail-nav-title">游戏场景设计</span>
+      <div class="detail-nav-spacer"></div>
+    </div>
+    <div class="detail-content">
+      <div class="detail-hero-video">
+        <video id="heroVideo-game-scene" loop playsinline>
+          <source src="" type="video/mp4">
+        </video>
+        <div class="video-placeholder" onclick="playHeroVideo('game-scene')">
+          <div class="video-play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+          </div>
+          <span class="video-play-label">播放场景漫游</span>
+        </div>
+      </div>
+      <div class="detail-info">
+        <div>
+          <h1 class="detail-title">游戏场景设计</h1>
+          <p class="detail-subtitle">Stylized Game Environment & Dynamic Lighting</p>
+          <div class="detail-description">
+            <p>风格化游戏环境与动态光照设计，在Unreal Engine中构建沉浸式游戏世界。注重场景的氛围营造和视觉叙事，让每一处环境都成为故事的一部分。</p>
+          </div>
+        </div>
+        <div class="detail-sidebar">
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">年份</div>
+            <div class="detail-meta-value">2024</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">工具</div>
+            <div class="detail-tools-list">
+              <span class="tool-tag">Blender</span>
+              <span class="tool-tag">UE5</span>
+              <span class="tool-tag">Photoshop</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <h2 class="detail-gallery-title">场景截图</h2>
+        <div class="detail-gallery-grid">
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-terracotta) 0%, var(--m-desert) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <rect x="10" y="15" width="60" height="35" rx="2" stroke="white" stroke-width="1.5"/>
+                <path d="M10 35 L40 20 L70 35" stroke="white" stroke-width="1"/>
+                <rect x="20" y="40" width="15" height="15" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">白模阶段</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-indigo) 0%, var(--m-azure) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <circle cx="60" cy="20" r="10" stroke="white" stroke-width="1"/>
+                <path d="M10 65 L30 35 L50 50 L70 25" stroke="white" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">最终光照渲染</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 层级页面 - UE场景设计制作详情 -->
+  <div class="detail-overlay" id="detail-ue-scene">
+    <div class="detail-nav">
+      <button class="detail-back" onclick="closeDetail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回
+      </button>
+      <span class="detail-nav-title">UE场景设计制作</span>
+      <div class="detail-nav-spacer"></div>
+    </div>
+    <div class="detail-content">
+      <div class="detail-hero-video">
+        <video id="heroVideo-ue-scene" loop playsinline>
+          <source src="" type="video/mp4">
+        </video>
+        <div class="video-placeholder" onclick="playHeroVideo('ue-scene')">
+          <div class="video-play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+          </div>
+          <span class="video-play-label">播放项目视频</span>
+        </div>
+      </div>
+      <div class="detail-info">
+        <div>
+          <h1 class="detail-title">UE场景设计制作</h1>
+          <p class="detail-subtitle">Rural Revitalization · Real-time Rendering</p>
+          <div class="detail-description">
+            <p>乡村振兴项目实时渲染，使用Unreal Engine构建写实的乡村环境。从地形生成到植被分布，从建筑建模到光照氛围，完整的场景制作流程展示。</p>
+          </div>
+        </div>
+        <div class="detail-sidebar">
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">年份</div>
+            <div class="detail-meta-value">2023</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">工具</div>
+            <div class="detail-tools-list">
+              <span class="tool-tag">Houdini</span>
+              <span class="tool-tag">Nuke</span>
+              <span class="tool-tag">After Effects</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <h2 class="detail-gallery-title">项目截图</h2>
+        <div class="detail-gallery-grid">
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-sage) 0%, var(--m-teal) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <path d="M10 60 L25 20 L40 45 L55 15 L70 40" stroke="white" stroke-width="1.5"/>
+                <path d="M10 70 Q 40 50, 70 70" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">乡村全景</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-amber) 0%, var(--m-gold) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <rect x="20" y="30" width="40" height="30" stroke="white" stroke-width="1.5"/>
+                <path d="M20 30 L40 15 L60 30" stroke="white" stroke-width="1.5"/>
+                <rect x="33" y="45" width="14" height="15" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">建筑细节</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 层级页面 - 角色动作设计详情 -->
+  <div class="detail-overlay" id="detail-action">
+    <div class="detail-nav">
+      <button class="detail-back" onclick="closeDetail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回
+      </button>
+      <span class="detail-nav-title">角色动作设计</span>
+      <div class="detail-nav-spacer"></div>
+    </div>
+    <div class="detail-content">
+      <div class="detail-hero-video">
+        <video id="heroVideo-action" loop playsinline>
+          <source src="" type="video/mp4">
+        </video>
+        <div class="video-placeholder" onclick="playHeroVideo('action')">
+          <div class="video-play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+          </div>
+          <span class="video-play-label">播放动作展示</span>
+        </div>
+      </div>
+      <div class="detail-info">
+        <div>
+          <h1 class="detail-title">角色动作设计</h1>
+          <p class="detail-subtitle">Advanced Rigging & Character Animation</p>
+          <div class="detail-description">
+            <p>高级角色绑定与动画制作，从骨骼系统搭建到表情控制，从基础运动到表演级动画。注重动作的节奏感与角色性格的表达，每个动作都服务于叙事。</p>
+          </div>
+        </div>
+        <div class="detail-sidebar">
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">年份</div>
+            <div class="detail-meta-value">2024</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">工具</div>
+            <div class="detail-tools-list">
+              <span class="tool-tag">Maya</span>
+              <span class="tool-tag">MotionBuilder</span>
+              <span class="tool-tag">UE5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <h2 class="detail-gallery-title">动画帧展示</h2>
+        <div class="detail-gallery-grid">
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-plum) 0%, var(--m-lavender) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <path d="M30 50 Q 35 20, 40 40 Q 45 60, 50 30" stroke="white" stroke-width="1.5"/>
+                <circle cx="40" cy="35" r="12" stroke="white" stroke-width="1" stroke-dasharray="3,3"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">绑定控制器视图</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-ink) 0%, var(--m-indigo) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <rect x="5" y="5" width="70" height="70" rx="4" stroke="white" stroke-width="1"/>
+                <path d="M20 55 L35 25 L50 45 L65 20" stroke="white" stroke-width="1.5"/>
+                <circle cx="35" cy="25" r="3" fill="white" opacity="0.5"/>
+                <circle cx="65" cy="20" r="3" fill="white" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">动画曲线编辑器</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 层级页面 - 实验性动画详情 -->
+  <div class="detail-overlay" id="detail-experimental">
+    <div class="detail-nav">
+      <button class="detail-back" onclick="closeDetail()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回
+      </button>
+      <span class="detail-nav-title">实验性动画</span>
+      <div class="detail-nav-spacer"></div>
+    </div>
+    <div class="detail-content">
+      <div class="detail-hero-video">
+        <video id="heroVideo-experimental" loop playsinline>
+          <source src="" type="video/mp4">
+        </video>
+        <div class="video-placeholder" onclick="playHeroVideo('experimental')">
+          <div class="video-play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+          </div>
+          <span class="video-play-label">播放实验动画</span>
+        </div>
+      </div>
+      <div class="detail-info">
+        <div>
+          <h1 class="detail-title">实验性动画</h1>
+          <p class="detail-subtitle">Abstract Experimentation & Procedural Art</p>
+          <div class="detail-description">
+            <p>抽象实验动画与程序化技术探索，在TouchDesigner与Processing中寻找视觉表达的新可能。打破常规叙事，用算法与直觉共同驱动画面的生成。</p>
+          </div>
+        </div>
+        <div class="detail-sidebar">
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">年份</div>
+            <div class="detail-meta-value">2023</div>
+          </div>
+          <div class="detail-meta-group">
+            <div class="detail-meta-label">工具</div>
+            <div class="detail-tools-list">
+              <span class="tool-tag">TouchDesigner</span>
+              <span class="tool-tag">After Effects</span>
+              <span class="tool-tag">Processing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <h2 class="detail-gallery-title">实验截图</h2>
+        <div class="detail-gallery-grid">
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-amber) 0%, var(--m-gold) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <path d="M20 40 Q 30 15, 40 40 Q 50 65, 60 40" stroke="white" stroke-width="1.5"/>
+                <circle cx="40" cy="40" r="8" stroke="white" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">程序化粒子系统</div>
+          </div>
+          <div class="gallery-item">
+            <div class="gallery-placeholder" style="background: linear-gradient(135deg, var(--m-ink) 0%, var(--m-plum) 100%);">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" opacity="0.3">
+                <circle cx="40" cy="40" r="25" stroke="white" stroke-width="0.5"/>
+                <circle cx="40" cy="40" r="20" stroke="white" stroke-width="0.5"/>
+                <circle cx="40" cy="40" r="15" stroke="white" stroke-width="0.5"/>
+                <circle cx="40" cy="40" r="10" stroke="white" stroke-width="0.5"/>
+              </svg>
+            </div>
+            <div class="gallery-item-label">生成式图形</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="footer">
     <p>「线条勾勒世界，色彩填充梦境」— 莫比斯风格重设计提案</p>
@@ -1503,6 +2524,161 @@
           target.scrollIntoView({ behavior: 'smooth' });
         }
       });
+    });
+
+    // ══════════════════════════════════════════
+    // 层级页面交互逻辑
+    // ══════════════════════════════════════════
+
+    let currentDetail = null;
+    let scrollPosition = 0;
+
+    // 打开层级页面
+    function openDetail(detailId) {
+      const overlay = document.getElementById(detailId);
+      if (!overlay) return;
+
+      currentDetail = detailId;
+      scrollPosition = window.scrollY;
+
+      // 禁止主页面滚动
+      document.body.style.overflow = 'hidden';
+
+      // 显示层级页面
+      overlay.classList.add('active');
+      overlay.scrollTop = 0;
+
+      // 暂停所有视频
+      document.querySelectorAll('.detail-hero-video video').forEach(v => {
+        v.pause();
+        v.currentTime = 0;
+      });
+      document.querySelectorAll('.video-placeholder').forEach(p => {
+        p.classList.remove('hidden');
+      });
+    }
+
+    // 关闭层级页面
+    function closeDetail() {
+      if (!currentDetail) return;
+
+      const overlay = document.getElementById(currentDetail);
+      if (!overlay) return;
+
+      // 暂停视频
+      const video = overlay.querySelector('.detail-hero-video video');
+      if (video) {
+        video.pause();
+      }
+
+      overlay.classList.remove('active');
+
+      // 恢复主页面滚动
+      document.body.style.overflow = '';
+      window.scrollTo(0, scrollPosition);
+
+      currentDetail = null;
+    }
+
+    // 播放开场视频
+    function playHeroVideo(id) {
+      const video = document.getElementById('heroVideo-' + id);
+      const placeholder = video?.parentElement?.querySelector('.video-placeholder');
+      if (!video) return;
+
+      if (video.querySelector('source')?.src === '' || !video.querySelector('source')?.src) {
+        // 没有视频源时，模拟播放动画
+        if (placeholder) {
+          placeholder.innerHTML = `
+            <div style="text-align:center;">
+              <p style="font-family:var(--font-accent);font-size:1.2rem;font-style:italic;color:rgba(255,255,255,0.8);letter-spacing:0.15em;">视频准备中…</p>
+              <p style="font-family:var(--font-body);font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:8px;letter-spacing:0.1em;">请替换为实际视频文件路径</p>
+            </div>
+          `;
+          setTimeout(() => {
+            placeholder.innerHTML = `
+              <div class="video-play-btn">
+                <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+              </div>
+              <span class="video-play-label">播放开场视频</span>
+            `;
+          }, 2000);
+        }
+        return;
+      }
+
+      if (placeholder) {
+        placeholder.classList.add('hidden');
+      }
+      video.play().catch(() => {
+        // 自动播放被阻止，显示手动播放按钮
+        if (placeholder) {
+          placeholder.classList.remove('hidden');
+          placeholder.innerHTML = `
+            <div class="video-play-btn" onclick="forcePlayVideo('${id}')">
+              <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+            </div>
+            <span class="video-play-label">点击播放</span>
+          `;
+        }
+      });
+    }
+
+    // 强制播放（处理自动播放限制）
+    function forcePlayVideo(id) {
+      const video = document.getElementById('heroVideo-' + id);
+      const placeholder = video?.parentElement?.querySelector('.video-placeholder');
+      if (!video) return;
+
+      video.muted = true;
+      if (placeholder) placeholder.classList.add('hidden');
+      video.play().catch(() => {});
+    }
+
+    // 视频章节播放
+    function playVideoSection(element, title) {
+      const heroVideo = document.querySelector('.detail-overlay.active .detail-hero-video');
+      if (!heroVideo) return;
+
+      // 滚动到顶部视频区
+      heroVideo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // 视觉反馈：临时显示章节标题
+      const video = heroVideo.querySelector('video');
+      const placeholder = heroVideo.querySelector('.video-placeholder');
+
+      if (placeholder && !placeholder.classList.contains('hidden')) {
+        placeholder.innerHTML = `
+          <div style="text-align:center;">
+            <p style="font-family:var(--font-display);font-size:1.8rem;color:rgba(255,255,255,0.9);margin-bottom:8px;">${title}</p>
+            <p style="font-family:var(--font-accent);font-size:0.9rem;font-style:italic;color:rgba(255,255,255,0.6);letter-spacing:0.15em;">视频章节切换中…</p>
+          </div>
+        `;
+        setTimeout(() => {
+          placeholder.innerHTML = `
+            <div class="video-play-btn">
+              <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
+            </div>
+            <span class="video-play-label">播放 ${title}</span>
+          `;
+        }, 1500);
+      }
+    }
+
+    // ESC 关闭层级页面
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && currentDetail) {
+        closeDetail();
+      }
+    });
+
+    // 鼠标滚轮在层级页面关闭时的处理（防止穿透）
+    document.querySelectorAll('.detail-overlay').forEach(overlay => {
+      overlay.addEventListener('wheel', (e) => {
+        if (!overlay.classList.contains('active')) {
+          e.preventDefault();
+        }
+      }, { passive: false });
     });
   </script>
 
